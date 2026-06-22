@@ -34,10 +34,10 @@
     "semantic-release": "semantic-release"
   },
   "peerDependencies": {
-    "@rsbuild/core": "^1.0.0"
+    "@rsbuild/core": "^1.4.0"
   },
   "devDependencies": {
-    "@rsbuild/core": "^1.0.0",
+    "@rsbuild/core": "^1.4.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/git": "^10.0.1",

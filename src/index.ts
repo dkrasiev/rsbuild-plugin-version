@@ -33,7 +33,12 @@ function git(args: string[], cwd: string): string {
   return execFileSync('git', args, { cwd, encoding: 'utf8' }).trim();
 }
 
-export function getVersionInfo(cwd: string): VersionInfo {
+export interface VersionInfoResult {
+  info: VersionInfo;
+  error?: Error;
+}
+
+export function getVersionInfo(cwd: string): VersionInfoResult {
   const envCommit = process.env.GIT_COMMIT;
   const envBranch = process.env.GIT_BRANCH;
   const envDate = process.env.GIT_COMMIT_DATE;
@@ -42,6 +47,7 @@ export function getVersionInfo(cwd: string): VersionInfo {
   let commitShort = envCommit ? envCommit.slice(0, 7) : '';
   let branch = envBranch ?? '';
   let date = envDate ?? '';
+  let error: Error | undefined;
 
   try {
     if (!commit) commit = git(['rev-parse', 'HEAD'], cwd);
@@ -49,19 +55,23 @@ export function getVersionInfo(cwd: string): VersionInfo {
     if (!branch) branch = git(['rev-parse', '--abbrev-ref', 'HEAD'], cwd);
     if (!date) date = git(['log', '-1', '--format=%cI'], cwd);
   } catch (err) {
-    if (!commit) {
-      throw new Error(
-        `[${PLUGIN_NAME}] failed to read git info from "${cwd}": ${(err as Error).message}`,
-      );
-    }
+    if (!commit) error = err as Error;
   }
 
+  commit ||= 'unknown';
+  commitShort ||= 'unknown';
+  branch ||= 'unknown';
+  date ||= 'unknown';
+
   return {
-    commit,
-    commitShort,
-    branch,
-    date,
-    buildTime: new Date().toISOString(),
+    info: {
+      commit,
+      commitShort,
+      branch,
+      date,
+      buildTime: new Date().toISOString(),
+    },
+    error,
   };
 }
 
@@ -82,7 +92,13 @@ export const pluginVersion = (
 
     const write = async () => {
       const rootDir = cwd ?? api.context.rootPath;
-      const info: VersionInfo = { ...getVersionInfo(rootDir), ...extra };
+      const { info: gitInfo, error } = getVersionInfo(rootDir);
+      if (error) {
+        api.logger.warn(
+          `[${PLUGIN_NAME}] failed to read git info from "${rootDir}": ${error.message}`,
+        );
+      }
+      const info: VersionInfo = { ...gitInfo, ...extra };
       const finalInfo = transform ? await transform(info) : info;
 
       const distRoot = api.context.distPath;
