@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/dkrasiev/rsbuild-plugin-version/compare/v1.0.0...v1.1.0) (2026-06-22)
+
+
+### Features
+
+* add minify option for output JSON ([3bc5ddc](https://github.com/dkrasiev/rsbuild-plugin-version/commit/3bc5ddc62946db0f5d60c2f8241cef3f0059dc8a))
+
 # 1.0.0 (2026-06-22)
 
 
