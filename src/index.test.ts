@@ -23,7 +23,8 @@ describe('getVersionInfo', () => {
   });
 
   it('returns commit, branch, date', () => {
-    const info = getVersionInfo(dir);
+    const { info, error } = getVersionInfo(dir);
+    expect(error).toBeUndefined();
     expect(info.commit).toMatch(/^[0-9a-f]{40}$/);
     expect(info.commitShort.length).toBeGreaterThanOrEqual(7);
     expect(info.branch).toBe('main');
@@ -31,12 +32,18 @@ describe('getVersionInfo', () => {
     expect(info.buildTime).toMatch(/^\d{4}-\d{2}-\d{2}T/);
   });
 
-  it('throws on non-git dir', () => {
+  it('returns unknown values and error on non-git dir without env vars', () => {
     const empty = mkdtempSync(join(tmpdir(), 'no-git-'));
     delete process.env.GIT_COMMIT;
     delete process.env.GIT_BRANCH;
     delete process.env.GIT_COMMIT_DATE;
-    expect(() => getVersionInfo(empty)).toThrow(/failed to read git info/);
+    const { info, error } = getVersionInfo(empty);
+    expect(error).toBeDefined();
+    expect(info.commit).toBe('unknown');
+    expect(info.commitShort).toBe('unknown');
+    expect(info.branch).toBe('unknown');
+    expect(info.date).toBe('unknown');
+    expect(info.buildTime).toMatch(/^\d{4}-\d{2}-\d{2}T/);
     rmSync(empty, { recursive: true, force: true });
   });
 
@@ -50,7 +57,8 @@ describe('getVersionInfo', () => {
     process.env.GIT_BRANCH = 'release';
     process.env.GIT_COMMIT_DATE = '2026-01-01T00:00:00Z';
     try {
-      const info = getVersionInfo(empty);
+      const { info, error } = getVersionInfo(empty);
+      expect(error).toBeUndefined();
       expect(info.commit).toBe('0123456789abcdef0123456789abcdef01234567');
       expect(info.commitShort).toBe('0123456');
       expect(info.branch).toBe('release');
@@ -67,7 +75,7 @@ describe('getVersionInfo', () => {
     process.env.GIT_COMMIT = 'deadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     process.env.GIT_BRANCH = 'override';
     try {
-      const info = getVersionInfo(dir);
+      const { info } = getVersionInfo(dir);
       expect(info.commit).toBe('deadbeefdeadbeefdeadbeefdeadbeefdeadbeef');
       expect(info.commitShort).toBe('deadbee');
       expect(info.branch).toBe('override');

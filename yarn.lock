@@ -671,7 +671,7 @@
   resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.62.2.tgz#3671ce3f9b928d5c01f879792d5c0b60ae14d4ad"
   integrity sha512-BfzEnDJOt9T8M989/lA37EcJgat01wLRnoi5dQf3QzOH7jzpqTAzdDbVfRljVr5r+jzKqpbHeyOfAaXxAd0PAA==
 
-"@rsbuild/core@^1.0.0":
+"@rsbuild/core@^1.4.0":
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/@rsbuild/core/-/core-1.7.5.tgz#971855fb6ca760c61eff5f67a09b39fae1dfcbd0"
   integrity sha512-i37urpoV4y9NSsGiUOuLdoI42KJ5h4gAZ8EG8Ilmsond3bxoAoOCu7YvC+1pJ7p+r16suVPW8cki891ZKHOoXQ==
