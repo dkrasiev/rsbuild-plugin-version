@@ -23,6 +23,8 @@ export interface PluginVersionOptions {
   extra?: Record<string, unknown>;
   /** Transform the final version object before write. */
   transform?: (info: VersionInfo) => VersionInfo | Promise<VersionInfo>;
+  /** Minify output JSON (no indentation/newlines). Default: true. */
+  minify?: boolean;
 }
 
 const PLUGIN_NAME = 'rsbuild-plugin-version';
@@ -69,6 +71,7 @@ export const pluginVersion = (
       emitOnDev = false,
       extra = {},
       transform,
+      minify = true,
     } = options;
 
     const write = async () => {
@@ -82,7 +85,10 @@ export const pluginVersion = (
         : resolve(distRoot, filename);
 
       mkdirSync(dirname(outPath), { recursive: true });
-      writeFileSync(outPath, `${JSON.stringify(finalInfo, null, 2)}\n`, 'utf8');
+      const json = minify
+        ? JSON.stringify(finalInfo)
+        : `${JSON.stringify(finalInfo, null, 2)}\n`;
+      writeFileSync(outPath, json, 'utf8');
     };
 
     api.onAfterBuild(async () => {

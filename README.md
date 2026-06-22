@@ -41,6 +41,7 @@ After build, `dist/version.json`:
 | `emitOnDev`  | `boolean`                         | `false`          | Also emit when dev server starts.            |
 | `extra`      | `Record<string, unknown>`         | `{}`             | Static fields merged into output.            |
 | `transform`  | `(info) => info \| Promise<info>` | —                | Mutate final object before write.            |
+| `minify`     | `boolean`                         | `true`           | Minify output JSON (no indentation).         |
 
 ## Example with extra fields
 
