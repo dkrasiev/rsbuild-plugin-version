@@ -1,3 +1,10 @@
+# [1.2.0-next.1](https://github.com/dkrasiev/rsbuild-plugin-version/compare/v1.1.0...v1.2.0-next.1) (2026-06-22)
+
+
+### Features
+
+* fall back to env vars when git unavailable ([c80e91f](https://github.com/dkrasiev/rsbuild-plugin-version/commit/c80e91fc1ab07562e13123bce790b184d01cfee3))
+
 # [1.1.0](https://github.com/dkrasiev/rsbuild-plugin-version/compare/v1.0.0...v1.1.0) (2026-06-22)
 
 
