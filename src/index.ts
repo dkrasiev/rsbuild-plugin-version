@@ -34,20 +34,26 @@ function git(args: string[], cwd: string): string {
 }
 
 export function getVersionInfo(cwd: string): VersionInfo {
-  let commit = '';
-  let commitShort = '';
-  let branch = '';
-  let date = '';
+  const envCommit = process.env.GIT_COMMIT;
+  const envBranch = process.env.GIT_BRANCH;
+  const envDate = process.env.GIT_COMMIT_DATE;
+
+  let commit = envCommit ?? '';
+  let commitShort = envCommit ? envCommit.slice(0, 7) : '';
+  let branch = envBranch ?? '';
+  let date = envDate ?? '';
 
   try {
-    commit = git(['rev-parse', 'HEAD'], cwd);
-    commitShort = git(['rev-parse', '--short', 'HEAD'], cwd);
-    branch = git(['rev-parse', '--abbrev-ref', 'HEAD'], cwd);
-    date = git(['log', '-1', '--format=%cI'], cwd);
+    if (!commit) commit = git(['rev-parse', 'HEAD'], cwd);
+    if (!commitShort) commitShort = git(['rev-parse', '--short', 'HEAD'], cwd);
+    if (!branch) branch = git(['rev-parse', '--abbrev-ref', 'HEAD'], cwd);
+    if (!date) date = git(['log', '-1', '--format=%cI'], cwd);
   } catch (err) {
-    throw new Error(
-      `[${PLUGIN_NAME}] failed to read git info from "${cwd}": ${(err as Error).message}`,
-    );
+    if (!commit) {
+      throw new Error(
+        `[${PLUGIN_NAME}] failed to read git info from "${cwd}": ${(err as Error).message}`,
+      );
+    }
   }
 
   return {
