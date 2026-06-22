@@ -1,3 +1,10 @@
+# [1.2.0-next.2](https://github.com/dkrasiev/rsbuild-plugin-version/compare/v1.2.0-next.1...v1.2.0-next.2) (2026-06-22)
+
+
+### Bug Fixes
+
+* do not throw when git unavailable, warn via api.logger ([655793e](https://github.com/dkrasiev/rsbuild-plugin-version/commit/655793e1843a96961d3bb61755095919c044e27b))
+
 # [1.2.0-next.1](https://github.com/dkrasiev/rsbuild-plugin-version/compare/v1.1.0...v1.2.0-next.1) (2026-06-22)
 
 

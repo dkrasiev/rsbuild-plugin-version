@@ -1,6 +1,6 @@
 {
   "name": "rsbuild-plugin-version",
-  "version": "1.2.0-next.1",
+  "version": "1.2.0-next.2",
   "description": "Rsbuild plugin that emits version.json with git commit, branch, and date info.",
   "type": "module",
   "main": "./dist/index.js",
